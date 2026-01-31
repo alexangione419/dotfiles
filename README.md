@@ -1,1 +1,1 @@
-Storage for dot files as if it was my $HOME
+Remote repo for my dotconfig files, currently just my neovim config
