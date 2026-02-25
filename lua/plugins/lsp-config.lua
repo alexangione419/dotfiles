@@ -14,7 +14,7 @@ return {
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "gopls", "pyright", "ts_ls" },
+        ensure_installed = { "lua_ls", "gopls", "pyright", "ts_ls", "clangd" },
         automatic_installation = true,
       })
     end,
@@ -24,22 +24,24 @@ return {
     "neovim/nvim-lspconfig",
     lazy = false,
     config = function()
-      -- 1) Global defaults for ALL servers (optional but nice)
-      vim.lsp.config("*", {
-        -- you can set shared capabilities, flags, etc here later
-      })
 
-      -- 2) Per-server overrides (optional)
-      vim.lsp.config("lua_ls", {
-        settings = {
-          Lua = {
-            diagnostics = { globals = { "vim" } },
-          },
+    vim.lsp.config("gopls", {})
+    vim.lsp.config("pyright", {})
+
+    vim.lsp.config("clangd", {
+      cmd = { "clangd", "--background-index" },
+    })
+
+    vim.lsp.config("lua_ls", {
+      settings = {
+        Lua = {
+          diagnostics = { globals = { "vim" } },
         },
-      })
+      },
+    })
 
-      -- 3) Enable servers (THIS is the key migration step)
-      vim.lsp.enable({ "ts_ls", "gopls", "pyright", "lua_ls" })
+
+      vim.lsp.enable({ "ts_ls", "gopls", "pyright", "lua_ls", "clangd" })
 
       -- 4) Keymaps only when an LSP actually attaches (best practice)
       vim.api.nvim_create_autocmd("LspAttach", {
